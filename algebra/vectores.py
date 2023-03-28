@@ -1,7 +1,7 @@
 """
     Tercera tarea de APA - manejo de vectores
 
-    Nombre y apellidos:
+    Nombre y apellidos: Francesc Valero Ruiz
 """
 
 class Vector:
@@ -85,3 +85,65 @@ class Vector:
 
         return -self + other
 
+
+### ENTREGA 3
+
+def __mul__(self, other):
+        """
+        Multiplicación de los elementos de dos vectores, o de un vector * un escalar.
+
+        >>> v1 = Vector([1, 2, 3])
+        >>> v2 = Vector([4, 5, 6])
+        >>> v1 * 2
+        Vector([2, 4, 6])
+        >>> v1 * v2
+        Vector([4, 10, 18])        
+        """
+        if isinstance(other, Vector):
+            return Vector([a * b for a, b in zip(self.data, other.data)])
+        elif isinstance(other, (int, float, complex)):
+            return Vector([other * x for x in self.data])
+        
+__rmul__ = __mul__
+
+def __matmul__(self, other):
+        """
+        Método para calcular la multiplicación matricial
+        (Producto escalar de 2 vectores)
+        >>> v1 = Vector([1, 2, 3])
+        >>> v2 = Vector([4, 5, 6])
+        >>> v1 @ v2
+        32
+        """
+        return sum(self * other)
+    
+__rmatmul__ = __matmul__
+
+def __floordiv__(self, other):
+        """
+        Método para calcular la componente tangencial de un vector
+    
+        >>> v1 = Vector([2, 1, 2])
+        >>> v2 = Vector([0.5, 1, 0.5])
+        >>> v1 // v2
+        Vector([1.0, 2.0, 1.0])
+        """
+        return (((self @ other) / (sum(item ** 2 for item in other))) * other)           
+__rfloordiv__ = __floordiv__    
+
+def __mod__(self, other):
+        """
+        Método para calcular la componente normal de un vector
+        
+        >>> v1 = Vector([2, 1, 2])
+        >>> v2 = Vector([0.5, 1, 0.5])
+        >>> v1 % v2
+        Vector([1.0, -1.0, 1.0])
+        """
+        return (self - (self // other))
+
+__rmod__ = __mod__
+
+
+import doctest
+doctest.testmod()
